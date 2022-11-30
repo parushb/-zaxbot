@@ -1,0 +1,5 @@
+./src/discord.log
+*.log
+venv/
+*.env
+.env
