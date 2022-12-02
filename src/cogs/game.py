@@ -4,6 +4,23 @@ import re
 import discord
 from discord import app_commands
 from discord.ext import commands
+from threading import Thread
+
+
+def keep_alive():
+    from flask import Flask
+    from threading import Thread
+
+    app = Flask("")
+
+    @app.route("/")
+    def index():
+        return "<h1>Bot is running</h1>"
+
+
+# Uncomment the line below when running on repl
+# Thread(target=keep_alive, args=("0.0.0.0", 8080)).start()
+
 
 TESTING_SERVER = 983057539212120065
 
@@ -70,13 +87,13 @@ class Soko(commands.Cog):
         info = await self.bot.db.fetchrow(f"SELECT level, games_won FROM game_info WHERE user_id={author.id}")
         games_won = info["games_won"]
         if games_won > 5:
-            if games_won%5 !=0:
-                while games_won%5 == 0:
+            if games_won % 5 != 0:
+                while games_won % 5 == 0:
                     games_won -= 1
 
-            obs = games_won/5
+            obs = games_won / 5
 
-            for f in range(random.randint(obs, obs+2)):
+            for f in range(random.randint(obs, obs + 2)):
                 self.matrix[random.randint(2, mat_height - 3)][random.randint(2, mat_width - 3)] = self.Obstacle
                 self.matrix[random.randint(1, mat_height - 2)][random.randint(1, mat_width - 2)] = self.Dump
         else:
@@ -107,13 +124,11 @@ class Soko(commands.Cog):
         await self.bot.db.execute(
             f"UPDATE running_games SET "
             f"old_player_position = $1, matrix_row_1= $2, matrix_row_2 = $3, matrix_row_3 = $4, "
-            f"matrix_row_4 = $5, matrix_row_5 = $6, matrix_row_6 = $7, "
+            f"matrix_row_4 = $5, matrix_row_5 = $6, matrix_row_6=$7, "
             f"matrix_row_7 = $8, player_position = $9, game_won=False"
             f" WHERE user_id = {author.id}",
-            player_position, self.matrix[0], self.matrix[1], self.matrix[2], self.matrix[3], self.matrix[4],
-            self.matrix[5], self.matrix[6], self.matrix[7], self.matrix[8], player_position)
-
-
+            player_position, self.matrix[1], self.matrix[2], self.matrix[3], self.matrix[4],
+            self.matrix[5], self.matrix[6], self.matrix[7], player_position)
 
     async def move(self, direction, user_id, message: discord.Message, matrix, player_position, reaction: bool = False):
         game_won = False
@@ -124,14 +139,14 @@ class Soko(commands.Cog):
             if matrix[new_player_position[0]][new_player_position[1]] == ":red_square:":
                 print(matrix[new_player_position[0]][new_player_position[1]])
                 print("Found Collision")
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
             if matrix[new_player_position[0]][new_player_position[1]] == ":cactus:":
                 print(matrix[new_player_position[0]][new_player_position[1]])
                 print("Found Collision")
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
@@ -148,7 +163,7 @@ class Soko(commands.Cog):
 
                 # For double obstacle
                 elif matrix[new_player_position[0] - 1][new_player_position[1]] == self.Obstacle:
-                    await message.channel.send("Invalid Move",  delete_after=3)
+                    await message.channel.send("Invalid Move", delete_after=3)
                     return
 
                 elif matrix[new_player_position[0] - 1][new_player_position[1]] == self.Inside_fill:
@@ -162,14 +177,12 @@ class Soko(commands.Cog):
             new_player_position = [player_position[0], player_position[1] - 1]
 
             if matrix[new_player_position[0]][new_player_position[1]] == ":red_square:":
-
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
             if matrix[new_player_position[0]][new_player_position[1]] == ":cactus:":
-
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
@@ -183,7 +196,7 @@ class Soko(commands.Cog):
 
                 # For double obstacle
                 elif matrix[new_player_position[0]][new_player_position[1] - 1] == self.Obstacle:
-                    await message.channel.send("Invalid Move",  delete_after=3)
+                    await message.channel.send("Invalid Move", delete_after=3)
                     return
 
                 elif matrix[new_player_position[0]][new_player_position[1] - 1] == self.Inside_fill:
@@ -196,14 +209,12 @@ class Soko(commands.Cog):
             new_player_position = [player_position[0] + 1, player_position[1]]
 
             if matrix[new_player_position[0]][new_player_position[1]] == ":red_square:":
-
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
             if matrix[new_player_position[0]][new_player_position[1]] == ":cactus:":
-
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
@@ -217,7 +228,7 @@ class Soko(commands.Cog):
 
                 # For double obstacle
                 elif matrix[new_player_position[0] + 1][new_player_position[1]] == self.Obstacle:
-                    await message.channel.send("Invalid Move",  delete_after=3)
+                    await message.channel.send("Invalid Move", delete_after=3)
                     return
 
                 elif matrix[new_player_position[0] + 1][new_player_position[1]] == self.Inside_fill:
@@ -232,13 +243,13 @@ class Soko(commands.Cog):
 
             if matrix[new_player_position[0]][new_player_position[1]] == ":red_square:":
                 print(matrix[new_player_position[0]][new_player_position[1]])
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
             if matrix[new_player_position[0]][new_player_position[1]] == ":cactus:":
                 print(matrix[new_player_position[0]][new_player_position[1]])
-                await message.channel.send("Invalid Move",  delete_after=3)
+                await message.channel.send("Invalid Move", delete_after=3)
 
                 return
 
@@ -252,7 +263,7 @@ class Soko(commands.Cog):
 
                 # For double obstacle
                 elif matrix[new_player_position[0]][new_player_position[1] + 1] == self.Obstacle:
-                    await message.channel.send("Invalid Move",  delete_after=3)
+                    await message.channel.send("Invalid Move", delete_after=3)
                     return
 
                 elif matrix[new_player_position[0]][new_player_position[1] + 1] == self.Inside_fill:
@@ -282,18 +293,18 @@ class Soko(commands.Cog):
         info = await self.bot.db.fetchrow(f"SELECT games_won, level FROM game_info WHERE user_id = {user_id}")
 
         if self.Obstacle not in matrix_string:  # PLAYER HAS WON
-            if (info["games_won"]+1) % 5 == 0:
+            if (info["games_won"] + 1) % 5 == 0:
                 embed = discord.Embed(title=f"Level {info['level']}",
                                       description=f"Victory!"
                                                   f" {matrix_string}"
                                                   f"You have won the Game. React with 🆕 to start a New Game"
-                                                  f"**Your have achieved Level `{info['level']+1}`**")
+                                                  f"**Your have achieved Level `{info['level'] + 1}`**")
             else:
                 embed = discord.Embed(title=f"Level {info['level']}",
                                       description=f"Victory!"
                                                   f" {matrix_string}"
                                                   f"You have won the Game. React with 🆕 to start a New Game"
-                                                  f"`{5 - (info['games_won']%5)}` game(s) to win for Level `{info['level']+1}`")
+                                                  f"`{5 - (info['games_won'] % 5)}` game(s) to win for Level `{info['level'] + 1}`")
 
             await self.bot.db.execute(f"UPDATE running_games SET game_won=True WHERE user_id={user_id}")
             game_won = True
@@ -314,8 +325,7 @@ class Soko(commands.Cog):
             f"matrix_row_4 = $2, matrix_row_5 = $4, matrix_row_6 = $6, matrix_row_7 = $7, "
             f"player_position = $8"
             f"WHERE user_id={user_id}",
-            matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7], matrix[8],
-            new_player_position
+            matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7], new_player_position
         )
 
         if game_won:
@@ -371,13 +381,13 @@ class Soko(commands.Cog):
         info = await self.bot.db.fetchrow(f"SELECT level, games_won FROM game_info WHERE user_id={author.id}")
         games_won = info["games_won"]
         if games_won > 5:
-            if games_won%5 !=0:
-                while games_won%5 == 0:
+            if games_won % 5 != 0:
+                while games_won % 5 == 0:
                     games_won -= 1
 
-            obs = games_won/5
+            obs = games_won / 5
 
-            for f in range(random.randint(obs, obs+2)):
+            for f in range(random.randint(obs, obs + 2)):
                 self.matrix[random.randint(2, mat_height - 3)][random.randint(2, mat_width - 3)] = self.Obstacle
                 self.matrix[random.randint(1, mat_height - 2)][random.randint(1, mat_width - 2)] = self.Dump
         else:
@@ -462,7 +472,7 @@ class Soko(commands.Cog):
                 await self.end_game(user=message.author.id, permanent=True, channel=message.channel, won=False,
                                     delete_channel=True)
 
-            if message.content is "w" or "a" or "s" or "d":
+            if message.content == "w" or "a" or "s" or "d":
                 initial_matrix = await self.bot.db.fetchrow(
                     f"SELECT * FROM running_games WHERE user_id={message.author.id}")
                 matrix = [initial_matrix["matrix_row_0"],
@@ -531,7 +541,6 @@ class Soko(commands.Cog):
             await self.end_game(user=user.id, permanent=True, channel=reaction.message.channel, won=False,
                                 delete_channel=True)
             await reaction.remove(user)
-
 
 
 async def setup(bot):

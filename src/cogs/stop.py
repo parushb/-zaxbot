@@ -42,3 +42,6 @@ class Stop(commands.Cog):
                 return
         except TypeError:
             pass
+
+async def setup(bot):
+    await bot.add_cog(Stop(bot))

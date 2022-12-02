@@ -42,7 +42,7 @@ def main():
         async def setup_hook(self) -> None:
             await database_pool(bot)
 
-    bot = UtilityBot(command_prefix="!", intents=intents)
+    bot = UtilityBot(command_prefix="!", intents=intents, help_command=None)
     asyncio.run(load_cogs(bot))  # load the bot modules
 
     def run():
