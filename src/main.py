@@ -13,7 +13,7 @@ TOKEN = os.getenv("zax_token")
 
 async def database_pool(bot):
     try:
-        bot.db = await asyncpg.create_pool("postgresql://bot_manager@localhost/bot_server")
+        bot.db = await asyncpg.create_pool(os.getenv("postgresql_url"))
         print("Connected to the database")
     except asyncpg.ClientCannotConnectError:
         print("Couldn't connect to database")
