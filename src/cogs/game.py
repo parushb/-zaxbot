@@ -91,9 +91,9 @@ class Soko(commands.Cog):
                 while games_won % 5 == 0:
                     games_won -= 1
 
-            obs = games_won / 5
+            obs = int(games_won / 5)
 
-            for f in range(random.randint(obs, obs + 2)):
+            for f in range(random.randint(obs+1, obs + 2)):
                 self.matrix[random.randint(2, mat_height - 3)][random.randint(2, mat_width - 3)] = self.Obstacle
                 self.matrix[random.randint(1, mat_height - 2)][random.randint(1, mat_width - 2)] = self.Dump
         else:
@@ -292,19 +292,19 @@ class Soko(commands.Cog):
         # CHECK IF THE PLAYER HAS WON
         info = await self.bot.db.fetchrow(f"SELECT games_won, level FROM game_info WHERE user_id = {user_id}")
 
-        if self.Obstacle not in matrix_string:  # PLAYER HAS WON
+        if self.Obstacle not in str(matrix):  # PLAYER HAS WON
             if (info["games_won"] + 1) % 5 == 0:
                 embed = discord.Embed(title=f"Level {info['level']}",
-                                      description=f"Victory!"
+                                      description=f"Victory!\n"
                                                   f" {matrix_string}"
-                                                  f"You have won the Game. React with 🆕 to start a New Game"
+                                                  f"You have won the Game. React with 🆕 to start a New Game\n"
                                                   f"**Your have achieved Level `{info['level'] + 1}`**")
             else:
                 embed = discord.Embed(title=f"Level {info['level']}",
-                                      description=f"Victory!"
+                                      description=f"Victory!\n"
                                                   f" {matrix_string}"
-                                                  f"You have won the Game. React with 🆕 to start a New Game"
-                                                  f"`{5 - (info['games_won'] % 5)}` game(s) to win for Level `{info['level'] + 1}`")
+                                                  f"You have won the Game. React with 🆕 to start a New Game\n"
+                                                  f"`{(5 - (info['games_won'] % 5))-1}` game(s) to win for Level `{info['level'] + 1}`")
 
             await self.bot.db.execute(f"UPDATE running_games SET game_won=True WHERE user_id={user_id}")
             game_won = True
@@ -315,17 +315,18 @@ class Soko(commands.Cog):
         channel = await self.bot.fetch_channel(message.channel.id)
         messages = [message async for message in channel.history(oldest_first=True, limit=2)]
         original_msg = messages[0]
-        if reaction is False:
-            await channel.purge(limit=1)
+        if not reaction:
+            await message.delete(delay=1)
         await original_msg.edit(embed=embed)
 
         await self.bot.db.execute(
             f"UPDATE running_games SET "
-            f"matrix_row_1 = $1, matrix_row_2 = $3, matrix_row_3 = $5, "
-            f"matrix_row_4 = $2, matrix_row_5 = $4, matrix_row_6 = $6, matrix_row_7 = $7, "
-            f"player_position = $8"
+            f"matrix_row_0=$1, matrix_row_1 = $2, matrix_row_2 = $3, matrix_row_3 = $4, "
+            f"matrix_row_4 = $5, matrix_row_5 = $6, matrix_row_6 = $7, matrix_row_7 = $8, matrix_row_8=$9, "
+            f"player_position = $10"
             f"WHERE user_id={user_id}",
-            matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7], new_player_position
+            matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7], matrix[8],
+            new_player_position
         )
 
         if game_won:
@@ -341,7 +342,7 @@ class Soko(commands.Cog):
             if len(check) != 0:
                 running_channel = self.bot.get_channel(check["channel_id"])
                 try:
-                    await ctx.send(f"You already have a running game in channel {running_channel.mention}")
+                    await ctx.send(f"You already have a running game in channel {running_channel.mention}", ephemeral=True)
                 except discord.ext.commands.BotMissingPermissions:
                     await ask_perms(ctx, "send_messages")
 
@@ -385,7 +386,7 @@ class Soko(commands.Cog):
                 while games_won % 5 == 0:
                     games_won -= 1
 
-            obs = games_won / 5
+            obs = int(games_won / 5)
 
             for f in range(random.randint(obs, obs + 2)):
                 self.matrix[random.randint(2, mat_height - 3)][random.randint(2, mat_width - 3)] = self.Obstacle

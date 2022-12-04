@@ -10,6 +10,7 @@ class BaseEvents(Cog):
 
     @Cog.listener()
     async def on_ready(self):
+        await self.bot.change_presence(activity=discord.Game('/play'))
         print(f'{self.bot.user} is ready!')
 
     @Cog.listener()
