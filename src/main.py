@@ -5,15 +5,37 @@ import os
 import asyncpg
 import logging
 from dotenv import load_dotenv
+from threading import Thread
 
 load_dotenv()
 
 TOKEN = os.getenv("zax_token")
 
 
+def alive():
+    from flask import Flask
+
+    app = Flask('')
+
+    @app.route('/')
+    def main_():
+        return "Your Bot Is Ready"
+
+    def run():
+        app.run(host="0.0.0.0", port=8000)
+
+    run()
+
+
+server = Thread(target=alive())
+server.start()
+
+
 async def database_pool(bot):
     try:
         bot.db = await asyncpg.create_pool(os.getenv("postgresql_url"))
+        #bot.db = await asyncpg.create_pool("postgres://bot_manager@localhost/bot_server")
+
         print("Connected to the database")
     except asyncpg.ClientCannotConnectError:
         print("Couldn't connect to database")
