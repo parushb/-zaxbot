@@ -69,7 +69,7 @@ Use Slash Commands
 
 ### Running the Bot
 ```shell
-cd Zax/
+cd Zax/src/
 python3 main.py
 ```
 ### Usage
