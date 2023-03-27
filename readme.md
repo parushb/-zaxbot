@@ -1,4 +1,4 @@
-<div align="center"><img src="https://www.dropbox.com/s/66ugku70qxfhbdy/Screenshot_2023-03-27_at_3.02.13_PM-removebg.png?dl=1"  width="200" height="280"></div>
+<div align="center"><img src="https://user-images.githubusercontent.com/76261357/228022250-6bdcbb38-dadb-43be-88f3-5b77055de2f8.png"  width="200" height="280"></div>
 
 # Zax - Discord Sokoban Bot
 
