@@ -32,7 +32,7 @@ server = Thread(target=alive)
 
 async def database_pool(bot):
     try:
-        bot.db = await asyncpg.create_pool(os.environ["neon_database"], statement_cache_size=0)
+        bot.db = await asyncpg.create_pool(os.environ["database"], statement_cache_size=0)
 
         print("Connected to the database")
     except asyncpg.ClientCannotConnectError:

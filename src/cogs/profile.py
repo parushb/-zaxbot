@@ -3,7 +3,7 @@ from discord.ext import commands
 import datetime
 
 
-class zax(commands.Cog):
+class Profile(commands.Cog):
     def __init__(self, bot):
         super().__init__
         self.bot = bot
@@ -35,4 +35,4 @@ class zax(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(zax(bot))
+    await bot.add_cog(Profile(bot))

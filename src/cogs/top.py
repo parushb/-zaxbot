@@ -42,7 +42,7 @@ class Top(commands.Cog):
         if players > 2:
             r = r.replace("`3`", ":third_place:")
 
-        Embed = discord.Embed(title=f"Top {players} Zax Players", color=discord.Colour.gold())
+        Embed = discord.Embed(title=f"Top {players} {self.bot.user.display_name} Players", color=discord.Colour.gold())
         Embed.add_field(name="Rank", value=r)
         Embed.add_field(name="Username", value=u)
         Embed.add_field(name="Games Won", value=w)
