@@ -38,14 +38,14 @@ async def database_pool(bot):
         print("Couldn't connect to database")
 
     await bot.db.execute("CREATE TABLE IF NOT EXISTS game_info("
-                         " user_id BIGINT,"
+                         " user_id BIGINT NOT NULL PRIMARY KEY,"
                          " games_won INTEGER DEFAULT 0,"
                          " games_started INTEGER DEFAULT 0,"
                          " level INTEGER DEFAULT 0,"
-                         " username TEXT)")
+                         " username TEXT NOT NULL)")
 
     await bot.db.execute("CREATE TABLE IF NOT EXISTS running_games("
-                         " user_id BIGINT,"
+                         " user_id BIGINT NOT NULL PRIMARY KEY,"
                          " channel_id BIGINT,"
                          " player_position INTEGER[],"
                          " game_won BOOLEAN DEFAULT false,"
@@ -61,8 +61,8 @@ async def database_pool(bot):
                          " old_player_position INTEGER[])")
 
     await bot.db.execute("CREATE TABLE IF NOT EXISTS users("
-                         " user_id BIGINT,"
-                         " username TEXT)")
+                         " user_id BIGINT NOT NULL PRIMARY KEY,"
+                         " username TEXT NOT NULL)")
 
 
 def logger() -> logging.Logger:
