@@ -42,7 +42,7 @@ class Soko(commands.Cog):
         self.reaction_to_text = {
             "⬆️": "w",
             "⬅️": "a",
-            "➡️": "d",
+            "s➡️": "d",
             "⬇️": "s"
         }
 
@@ -53,26 +53,26 @@ class Soko(commands.Cog):
             await channel.delete()
 
             # Delete from files
-            with open('cogs/player_data/running_channels.txt', 'r') as fr:
+            with open('src/cogs/player_data/running_channels.txt', 'r') as fr:
                 lines = fr.readlines()
 
-                with open('cogs/player_data/temp_files/temp_channels.txt', 'w') as fw:
+                with open('src/cogs/player_data/temp_files/temp_channels.txt', 'w') as fw:
                     for line in lines:
 
                         if line.strip('\n') != str(channel.id):
                             fw.write(line)
-            os.replace('cogs/player_data/temp_files/temp_channels.txt', 'cogs/player_data/running_channels.txt')
+            os.replace('src/cogs/player_data/temp_files/temp_channels.txt', 'src/cogs/player_data/running_channels.txt')
 
             # Do same for the players file
-            with open('cogs/player_data/live_players.txt', 'r') as fr:
+            with open('src/cogs/player_data/live_players.txt', 'r') as fr:
                 lines = fr.readlines()
 
-                with open('cogs/player_data/temp_files/temp_players.txt', 'w') as fw:
+                with open('src/cogs/player_data/temp_files/temp_players.txt', 'w') as fw:
                     for line in lines:
 
                         if line.strip('\n') != str(user):
                             fw.write(line)
-            os.replace('cogs/player_data/temp_files/temp_players.txt', 'cogs/player_data/live_players.txt')
+            os.replace('src/cogs/player_data/temp_files/temp_players.txt', 'src/cogs/player_data/live_players.txt')
 
             print("Deleted")
         if permanent:
@@ -357,7 +357,7 @@ class Soko(commands.Cog):
                 "I am sorry for this inconvenience :frowning2::white_frowning_face:", ephemeral=True)
             return
         # New and faster existing game check system
-        with open(rel_path("cogs/player_data/live_players.txt"), 'r') as file:
+        with open(rel_path("src/cogs/player_data/live_players.txt"), 'r') as file:
             live_players = file.read()
             if str(ctx.author.id) in live_players:
                 channel = await self.bot.db.fetchrow(
@@ -371,7 +371,7 @@ class Soko(commands.Cog):
                     exit()
                 return
             else:
-                with open(rel_path('cogs/player_data/live_players.txt'), 'a') as i:
+                with open(rel_path('src/cogs/player_data/live_players.txt'), 'a') as i:
                     i.write(f"{str(ctx.author.id)}\n")
 
         # Old existing game check system
@@ -503,7 +503,7 @@ class Soko(commands.Cog):
             player_position)
 
         # Update file
-        with open(rel_path('cogs/player_data/running_channels.txt'), 'a') as i:
+        with open(rel_path('src/cogs/player_data/running_channels.txt'), 'a') as i:
             i.write(f"{str(channel.id)}\n")
 
     # @commands.Cog.listener()
@@ -539,7 +539,7 @@ class Soko(commands.Cog):
         if user == self.bot.user:
             return
 
-        with open(rel_path('cogs/player_data/running_channels.txt'), 'r') as file:
+        with open(rel_path('src/cogs/player_data/running_channels.txt'), 'r') as file:
             channels = file.read()
 
         if not str(reaction.message.channel.id) in channels:

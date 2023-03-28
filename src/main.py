@@ -86,10 +86,10 @@ def main():
 
         async def setup_hook(self) -> None:
             await database_pool(bot)
-            if not os.path.exists("cogs/player_data/temp_files"):
-                os.makedirs(name="cogs/player_data/temp_files")
-                open("cogs/player_data/live_players.txt", "w").close()
-                open("cogs/player_data/running_channels.txt", "w").close()
+            if not os.path.exists("src/cogs/player_data/temp_files"):
+                os.makedirs(name="src/cogs/player_data/temp_files")
+                open("src/cogs/player_data/live_players.txt", "w").close()
+                open("src/cogs/player_data/running_channels.txt", "w").close()
 
     bot = UtilityBot(command_prefix="!", intents=intents, help_command=None)
     asyncio.run(load_cogs(bot))  # load the bot modules
@@ -102,7 +102,7 @@ def main():
 
 
 async def load_cogs(bot):
-    for filename in os.listdir("cogs/"):
+    for filename in os.listdir("src/cogs/"):
         if filename.endswith(".py") and not filename.startswith("_"):
             await bot.load_extension(f"cogs.{filename[:-3]}")
             print(f"Loaded cogs.{filename[:-3]}")
