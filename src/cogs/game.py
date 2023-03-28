@@ -42,7 +42,7 @@ class Soko(commands.Cog):
         self.reaction_to_text = {
             "⬆️": "w",
             "⬅️": "a",
-            "s➡️": "d",
+            "➡️": "d",
             "⬇️": "s"
         }
 
