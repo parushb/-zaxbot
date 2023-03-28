@@ -332,13 +332,12 @@ class Soko(commands.Cog):
 
         await self.bot.db.execute(
             f"UPDATE running_games SET "
-            f"matrix_row_0=$1, matrix_row_1 = $2, matrix_row_2 = $3, matrix_row_3 = $4, "
-            f"matrix_row_4 = $5, matrix_row_5 = $6, matrix_row_6 = $7, matrix_row_7 = $8, matrix_row_8=$9, "
-            f"player_position = $10 "
+            f"matrix_row_1 = $1, matrix_row_2 = $2, matrix_row_3 = $3, "
+            f"matrix_row_4 = $4, matrix_row_5 = $5, matrix_row_6 = $6, matrix_row_7 = $7, "
+            f"player_position = $8 "
             f"WHERE user_id={user_id}",
-            matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7], matrix[8],
-            new_player_position
-        )
+            matrix[1], matrix[2], matrix[3], matrix[4], matrix[5], matrix[6], matrix[7],
+            new_player_position)
 
         if game_won:
             await self.end_game(user=user_id, channel=channel, won=True, delete_channel=False)
