@@ -18,14 +18,15 @@ class Help(commands.Cog):
         Embed = discord.Embed(colour=discord.Colour.brand_red())
 
         Embed.add_field(name="How to Play", inline=False,
-                        value=f"You are a player named {self.bot.user.display_name}, your work is to push :brown_square: on top of their correct "
+                        value=f"You are a player named {self.bot.user.display_name}, your work is to push :brown_square:"
+                              f" on top of their correct "
                               "destination :cactus:")
         Embed.add_field(name="Features", inline=False,
                         value="➡️`Infinite Levels`\n"
                               "Each Map is randomly generated, the difficulty increases as you progress in the Game\n"
-                              "➡️`Varied Controls`\n"
-                              f"{self.bot.user.display_name} has multiple control options to improve the player's experience,"
-                              " including reactions and `wasd` commands!\n"
+                              "➡️`Controls`\n"
+                              f"{self.bot.user.display_name} uses reactions as controls which are better than `wasd`"
+                              f"commands\n"
                               "➡️`Play/Pause Game`\n"
                               "Since Each Game of Sokoban is played in a dedicated channel of it's own which only "
                               "you can see! which not only improves the experience of the Player but also gives "
@@ -35,7 +36,7 @@ class Help(commands.Cog):
                               "**`/stop`** to stop any running game, If any\n"
                               "**`/help`** displays this\n"
                               "**`/top`** shows the top player of this game\n"
-                              "**'/profile'** shows the profile of the given user\n"
+                              "**`/profile`** shows the profile of the given user\n"
                               "**`/feedback`** can be used to report any issues or suggestion")
 
         Embed.add_field(name="Extra", inline=False,

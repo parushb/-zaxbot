@@ -27,8 +27,7 @@ def alive():
     run()
 
 
-server = Thread(target=alive)
-
+#Thread(target=alive).start()
 
 async def database_pool(bot):
     try:
@@ -97,7 +96,6 @@ def main():
 
     def run():
         handler = logging.FileHandler(filename="discord.log", encoding="utf-8")
-        bot.server = server
         bot.run(token=TOKEN, log_handler=handler)
 
     run()

@@ -43,7 +43,10 @@ class BaseEvents(Cog):
         Embed.add_field(name="Commands", inline=False,
                         value="**`/play`** to start a new game, If you are not in one\n"
                               "**`/stop`** to stop any running game, If any\n"
-                              "**`/help`** displays this")
+                              "**`/help`** displays this\n"
+                              "**`/top`** shows the top player of this game\n"
+                              "**`/profile`** shows the profile of the given user\n"
+                              "**`/feedback`** can be used to report any issues or suggestion")
 
         Embed.add_field(name="Extras", inline=False,
                         value="Made with ❤️ by `init#0329`\n"
